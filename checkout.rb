@@ -155,7 +155,7 @@ class Basket
 			if item.discount_num>0
 				counts[item.name]+=1
 				if counts[item.name]==item.discount_num
-					total_price-=(item.price*counts[item.name])-item.discount_price
+					total_price-=(item.price*item.discount_num)-item.discount_price
 					counts[item.name]=0;
 				end
 			end
