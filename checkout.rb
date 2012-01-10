@@ -4,10 +4,10 @@ class CheckoutTests < Test::Unit::TestCase
 	
 	
 	def setup
-		@apple = Item.new("apple",50)
-		@biscuits = Item.new("biscuits",30)
-		@chocolate = Item.new("chocolate",20)
-		@tea = Item.new("tea",15)
+		@apple = Item.new("apple",50,3,130)
+		@biscuits = Item.new("biscuits",30,2,45)
+		@chocolate = Item.new("chocolate",20,0,0)
+		@tea = Item.new("tea",15,0,0)
 	end
 	
 	def test_item_price_50
@@ -149,26 +149,38 @@ class Basket
 	end
 	def total_price
 		total_price=0;
-		apples = @items.select {|item| item.name == "apple"}
-		total_price+=(apples.size/3).round * 130 + (apples.size % 3) * 50
-		biscuits = @items.select {|item| item.name == "biscuits"}
-		total_price+=(biscuits.size/2).round * 45 + (biscuits.size % 2) * 30
-		chocolates = @items.select {|item| item.name == "chocolate"}
-		total_price+=chocolates.size * 20
-		teas = @items.select {|item| item.name == "tea"}
-		total_price+=teas.size * 15
+		counts={"apple"=>0,"biscuits"=>0,"chocolate"=>0,"tea"=>0}
+		@items.each do |item|
+			total_price+=item.price
+			if item.discount_num>0
+				counts[item.name]+=1
+				if counts[item.name]==item.discount_num
+					total_price-=(item.price*counts[item.name])-item.discount_price
+					counts[item.name]=0;
+				end
+			end
+		end
+		return total_price
 	end
 end
 
 class Item
-	def initialize(item_name, item_price)
+	def initialize(item_name, item_price,item_discount_num,item_discount_price)
 		@price=item_price
 		@name=item_name
+		@discount_num=item_discount_num
+		@discount_price=item_discount_price
 	end
 	def price
 		return @price
 	end
 	def name
 		return @name
+	end
+	def discount_num
+		return @discount_num
+	end
+	def discount_price
+		return @discount_price
 	end
 end
