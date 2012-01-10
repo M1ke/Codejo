@@ -104,6 +104,28 @@ class CheckoutTests < Test::Unit::TestCase
 		assert_equal 160, basket.total_price
 	end
 	
+	def test_basket_total_is_175_when_two_apples_and_biscuits_and_apple_and_biscuit_added
+		basket=Basket.new
+		basket.add(@apple)
+		basket.add(@apple)
+		basket.add(@biscuits)
+		basket.add(@apple)
+		basket.add(@biscuits)
+		assert_equal 175, basket.total_price
+	end
+	
+	def test_basket_total_is_210_when_two_apples_and_biscuits_and_apple_and_biscuit_and_chocolate_and_tea_added
+		basket=Basket.new
+		basket.add(@apple)
+		basket.add(@apple)
+		basket.add(@biscuits)
+		basket.add(@apple)
+		basket.add(@biscuits)
+		basket.add(@chocolate)
+		basket.add(@tea)
+		assert_equal 210, basket.total_price
+	end
+	
 end
 
 class Basket
@@ -126,8 +148,15 @@ class Basket
 		return @count
 	end
 	def total_price
+		total_price=0;
 		apples = @items.select {|item| item.name == "apple"}
-		(apples.size/3).rnd * 130 + (apples.size % 3) * 50
+		total_price+=(apples.size/3).round * 130 + (apples.size % 3) * 50
+		biscuits = @items.select {|item| item.name == "biscuits"}
+		total_price+=(biscuits.size/2).round * 45 + (biscuits.size % 2) * 30
+		chocolates = @items.select {|item| item.name == "chocolate"}
+		total_price+=chocolates.size * 20
+		teas = @items.select {|item| item.name == "tea"}
+		total_price+=teas.size * 15
 	end
 end
 
