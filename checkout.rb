@@ -155,7 +155,7 @@ class Basket
 			if item.discount_num>0
 				counts[item.name]+=1
 				if counts[item.name]==item.discount_num
-					total_price-=(item.price*item.discount_num)-item.discount_price
+					total_price-=item.discount_price
 					counts[item.name]=0;
 				end
 			end
@@ -169,7 +169,7 @@ class Item
 		@price=item_price
 		@name=item_name
 		@discount_num=item_discount_num
-		@discount_price=item_discount_price
+		@discount_price=(item_price*item_discount_num)-item_discount_price
 	end
 	def price
 		return @price
